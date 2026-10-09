@@ -1,0 +1,20 @@
+---
+- name: Copy and run bash script
+  hosts: myserver
+  become: false
+  gather_facts: false
+
+  tasks:
+    - name: Copy script to server
+      ansible.builtin.copy:
+        src: ../files/health_check.sh
+        dest: /tmp/health_check.sh
+        mode: "0755"
+
+    - name: Run script
+      ansible.builtin.command: /tmp/health_check.sh
+      register: result
+
+    - name: Show output
+      ansible.builtin.debug:
+        var: result.stdout_lines
